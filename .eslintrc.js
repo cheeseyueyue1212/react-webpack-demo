@@ -53,7 +53,7 @@ module.exports = {
     'spaced-comment': 2,
     'switch-colon-spacing': ['error', { after: true, before: false }],
     'arrow-spacing': 2,
-    quotes: [0, 'single'],
+    quotes: [2, 'single'],
     'key-spacing': 2,
     'comma-dangle': ['error', 'never'],
     'no-empty-function': 1,
