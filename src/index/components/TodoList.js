@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Todo from './Todo';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Todo from './Todo'
 
 function TodoList({ todos, toggleTodo }) {
   return (
@@ -9,7 +9,7 @@ function TodoList({ todos, toggleTodo }) {
         <Todo key={todo.id} {...todo} onClick={() => toggleTodo(todo.id)} />
     ))}
     </ul>
-  );
+  )
 }
 
 TodoList.propTypes = {
@@ -17,10 +17,10 @@ TodoList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       completed: PropTypes.bool.isRequired,
-      text: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired
     }).isRequired,
   ).isRequired,
-  toggleTodo: PropTypes.func.isRequired,
-};
+  toggleTodo: PropTypes.func.isRequired
+}
 
-export default TodoList;
+export default TodoList
