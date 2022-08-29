@@ -6,42 +6,42 @@ const webpack = require('webpack')
 // css单独文件打包
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // css压缩
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 // js压缩
-const TerserPlugin = require("terser-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin')
 // 删除上一次打包结果文件 webpack5已用配置支持
 // const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 // 多设备自动兼容 css
-const autoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer')
 // 多页面应用时，获取目录
 const glob = require('glob')
 
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
 
-const ESLintPlugin = require('eslint-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin')
 
 // 日志信息样式
 const FriendlyErrorsWebpackPlugin = require('@soda/friendly-errors-webpack-plugin')
 
 // 速度分析
 const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin')
-const smp = new SpeedMeasureWebpackPlugin();
+const smp = new SpeedMeasureWebpackPlugin()
 
 // 体积分析工具
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 // webpack 5 支持cache, 不需要再处理
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 // css tree shaking
-const PurgecssWebpackPlugin = require('purgecss-webpack-plugin');
+const PurgecssWebpackPlugin = require('purgecss-webpack-plugin')
 
 const PATHS = {
   src: path.join(__dirname, 'src')
 }
 
 const setMPF = () => {
-  const entry = {};
-  const htmlWebpackPlugins = [];
+  const entry = {}
+  const htmlWebpackPlugins = []
 
   // 获取所有的匹配目录
   const entryFiles = glob.sync(path.join(__dirname, './src/*/index.js'))
@@ -51,8 +51,8 @@ const setMPF = () => {
       const entryFile = entryFiles[index]
 
       // '/Users/liyue/Documents/pack/src/index/index.js',
-      const match = entryFile.match(/src\/(.*)\/index\.js/);
-      const pageName = match && match[1];
+      const match = entryFile.match(/src\/(.*)\/index\.js/)
+      const pageName = match && match[1]
 
       entry[pageName] = entryFile
 
@@ -71,7 +71,7 @@ const setMPF = () => {
             removeComments: false
           }
         }),
-      );
+      )
     })
 
   return {
@@ -88,7 +88,7 @@ module.exports = smp.wrap({
   output: {
     filename: '[name]_[chunkhash:8].js',
     path: __dirname + '/dist', // 绝对路径
-    clean: true,
+    clean: true
   },
   mode: 'production',
   // mode: 'none',
@@ -98,9 +98,9 @@ module.exports = smp.wrap({
         MiniCssExtractPlugin.loader,
         'css-loader'
       ]},
-      {test: /\.scss/, use: [ MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']},
-      {test: /\.less$/, use: [ MiniCssExtractPlugin.loader, 'css-loader', 'less-loader', {
-        loader: "postcss-loader",
+      {test: /\.scss/, use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']},
+      {test: /\.less$/, use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader', {
+        loader: 'postcss-loader',
         options: {
             postcssOptions: {
                 plugins: [autoprefixer({
@@ -113,7 +113,7 @@ module.exports = smp.wrap({
                 })]
             }
 
-        },
+        }
     },
     {
       loader: 'px2rem-loader',
@@ -135,7 +135,7 @@ module.exports = smp.wrap({
             loader: 'thread-loader',
             options: {
               workers: 3
-            },
+            }
           },
           {
             loader: 'babel-loader'
@@ -158,7 +158,7 @@ module.exports = smp.wrap({
               quality: 65
             },
             optipng: {
-              enabled: false,
+              enabled: false
             },
             pngquant: {
               quality: [0.65, 0.9],
@@ -197,12 +197,12 @@ module.exports = smp.wrap({
 
     new FriendlyErrorsWebpackPlugin(),
 
-    //分包
+    // 分包
     new webpack.DllReferencePlugin({
       context: __dirname,
       manifest: require('./build/library/library.json'),
       scope: 'xyz',
-      sourceType: 'commonjs2',
+      sourceType: 'commonjs2'
     }),
 
     new PurgecssWebpackPlugin({
@@ -213,7 +213,7 @@ module.exports = smp.wrap({
     function() {
       this.hooks.done.tap('MyPlugin', (stats) => {
         if (stats.compilation.errors && stats.compilation.errors.length && process.argv.indexOf('-watch') === -1) {
-          console.log('-----------build error');
+          console.log('-----------build error')
           process.exit(1)
         }
       })
@@ -250,7 +250,7 @@ module.exports = smp.wrap({
       // css压缩
       new CssMinimizerPlugin()
     ],
-    minimize:true,
+    minimize: true,
 
     // 分离公共包
     splitChunks: {
@@ -268,18 +268,18 @@ module.exports = smp.wrap({
           name: 'vendors',
           chunks: 'all'
         }
-      },
-    },
+      }
+    }
   },
 
   devServer: {
-    static: path.join(__dirname, "dist"),
+    static: path.join(__dirname, 'dist'),
     compress: true,
     port: 9999,
     open: true
   },
 
-  devtool: 'source-map',
+  devtool: 'source-map'
   // stats: 'errors-only',
   // resolve: {
   // 感觉反而变慢（wepack5中
